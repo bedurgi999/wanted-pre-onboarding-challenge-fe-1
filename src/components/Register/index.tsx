@@ -8,6 +8,8 @@ import {
   RegisterButton,
   ValidWord,
 } from "./index.style";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 interface UserRegister {
   email: string;
@@ -30,6 +32,8 @@ function Register() {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+  const serverUrl = String(process.env.REACT_APP_BACKPORT);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRegisterInfo((cur): UserRegister => {
@@ -37,6 +41,24 @@ function Register() {
       newInfo[e.target.name as keyof UserRegister] = e.target.value; // 정석
       return newInfo;
     });
+  };
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("asd");
+    console.log(serverUrl);
+    console.log(process.env.REACT_APP_BACKPORT);
+    await axios.post("http://localhost:8080/users/create", registerInfo);
+    setRegisterInfo({
+      email: "",
+      password: "",
+    });
+    setValid({
+      idValid: false,
+      pwValid: false,
+    });
+    alert("회원가입이 완료되었습니다.");
+    navigate("/login");
   };
 
   useEffect((): void => {
@@ -69,7 +91,7 @@ function Register() {
   }, [registerInfo.password]);
   return (
     <RegisterBox>
-      <RegisterForm>
+      <RegisterForm onSubmit={handleRegister}>
         <InputBox>
           <RegisterText>아이디</RegisterText>
           <RegisterInput

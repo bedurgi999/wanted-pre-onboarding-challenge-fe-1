@@ -8,6 +8,8 @@ import {
   LoginButton,
   ValidWord,
 } from "./index.style";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface UserLogin {
   email: string;
@@ -30,6 +32,7 @@ function Login() {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginInfo((cur): UserLogin => {
@@ -38,7 +41,13 @@ function Login() {
       return newInfo;
     });
   };
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
+    await axios.post("http://localhost:8080/users/login", loginInfo);
+
+    navigate("/todo");
+  };
   useEffect((): void => {
     if (loginInfo.email !== "") {
       setValid({
@@ -70,7 +79,7 @@ function Login() {
 
   return (
     <LoginBox>
-      <LoginForm>
+      <LoginForm onSubmit={handleLogin}>
         <InputBox>
           <LoginText>아이디</LoginText>
           <LoginInput
