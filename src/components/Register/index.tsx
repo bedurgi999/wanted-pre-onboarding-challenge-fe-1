@@ -45,9 +45,6 @@ function Register() {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("asd");
-    console.log(serverUrl);
-    console.log(process.env.REACT_APP_BACKPORT);
     await axios.post("http://localhost:8080/users/create", registerInfo);
     setRegisterInfo({
       email: "",

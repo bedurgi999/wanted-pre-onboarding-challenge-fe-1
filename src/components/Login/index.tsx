@@ -44,8 +44,11 @@ function Login() {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await axios.post("http://localhost:8080/users/login", loginInfo);
-
+    const res = await axios.post(
+      "http://localhost:8080/users/login",
+      loginInfo
+    );
+    sessionStorage.setItem("userToken", res.data.token);
     navigate("/todo");
   };
   useEffect((): void => {
